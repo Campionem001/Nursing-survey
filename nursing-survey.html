@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nursing Research Survey – Theory Practice Gap</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0f2240;
+    --teal: #1a7a6e;
+    --gold: #c9a84c;
+    --cream: #fdf8f0;
+    --light: #f0f4f8;
+    --text: #1e2d3d;
+    --muted: #6b7a8d;
+    --white: #ffffff;
+    --red: #c0392b;
+    --green: #1a7a6e;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  .site-header {
+    background: var(--navy);
+    color: white;
+    padding: 2rem 1.5rem 1.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .site-header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 70% 50%, rgba(201,168,76,0.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .site-header .badge {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--navy);
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    margin-bottom: 0.8rem;
+  }
+  .site-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.3rem, 4vw, 1.9rem);
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 0.4rem;
+  }
+  .site-header p {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.65);
+    max-width: 500px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+
+  /* ── PROGRESS ── */
+  .progress-wrap {
+    background: var(--navy);
+    padding: 0 1.5rem 1.2rem;
+  }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 0.4rem;
+  }
+  .progress-bar-bg {
+    background: rgba(255,255,255,0.1);
+    border-radius: 20px;
+    height: 6px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    background: linear-gradient(90deg, var(--teal), var(--gold));
+    height: 100%;
+    border-radius: 20px;
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+
+  /* ── MAIN ── */
+  .container {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 1.5rem 1rem 4rem;
+  }
+
+  /* ── SECTION TITLE ── */
+  .section-heading {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin: 2rem 0 1rem;
+  }
+  .section-heading .dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--gold);
+    flex-shrink: 0;
+  }
+  .section-heading h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--navy);
+    letter-spacing: 0.02em;
+  }
+  .section-heading .line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(201,168,76,0.4), transparent);
+  }
+
+  /* ── QUESTION CARD ── */
+  .q-card {
+    background: white;
+    border-radius: 14px;
+    padding: 1.2rem 1.3rem;
+    margin-bottom: 0.9rem;
+    box-shadow: 0 2px 12px rgba(15,34,64,0.06);
+    border: 1.5px solid transparent;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .q-card.answered {
+    border-color: rgba(26,122,110,0.3);
+  }
+  .q-label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--gold);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.4rem;
+  }
+  .q-text {
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.5;
+    margin-bottom: 0.9rem;
+  }
+
+  /* ── OPTIONS ── */
+  .options-row {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .opt-btn {
+    flex: 1;
+    min-width: 60px;
+    padding: 0.55rem 0.4rem;
+    border: 2px solid #dde3ec;
+    border-radius: 10px;
+    background: var(--light);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--muted);
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.18s;
+    user-select: none;
+  }
+  .opt-btn:hover { border-color: var(--teal); color: var(--teal); background: rgba(26,122,110,0.06); }
+  .opt-btn.selected { background: var(--teal); border-color: var(--teal); color: white; }
+
+  /* Yes/No style */
+  .options-yn .opt-btn { font-size: 0.85rem; }
+
+  /* ── SUBMIT ── */
+  .submit-wrap { margin-top: 2rem; text-align: center; }
+  .submit-btn {
+    background: linear-gradient(135deg, var(--teal), #0f5c52);
+    color: white;
+    border: none;
+    border-radius: 14px;
+    padding: 1rem 2.5rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+    box-shadow: 0 6px 24px rgba(26,122,110,0.35);
+    transition: transform 0.15s, box-shadow 0.15s;
+    width: 100%;
+    max-width: 340px;
+  }
+  .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(26,122,110,0.4); }
+  .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+  .submit-note { font-size: 0.75rem; color: var(--muted); margin-top: 0.7rem; }
+
+  /* ── THANK YOU ── */
+  #thankyou {
+    display: none;
+    text-align: center;
+    padding: 4rem 1.5rem;
+  }
+  .ty-icon { font-size: 3rem; margin-bottom: 1rem; }
+  #thankyou h2 { font-family: 'Playfair Display', serif; font-size: 1.6rem; color: var(--navy); margin-bottom: 0.6rem; }
+  #thankyou p { color: var(--muted); font-size: 0.9rem; line-height: 1.6; }
+
+  /* ── ADMIN BUTTON ── */
+  .admin-fab {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    background: var(--navy);
+    color: var(--gold);
+    border: none;
+    border-radius: 50%;
+    width: 52px; height: 52px;
+    font-size: 1.3rem;
+    cursor: pointer;
+    box-shadow: 0 4px 18px rgba(15,34,64,0.35);
+    z-index: 100;
+    transition: transform 0.2s;
+  }
+  .admin-fab:hover { transform: scale(1.1); }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(15,34,64,0.7);
+    backdrop-filter: blur(4px);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: white;
+    border-radius: 20px;
+    padding: 2rem 1.5rem;
+    width: 100%;
+    max-width: 420px;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  .modal h3 { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--navy); margin-bottom: 0.3rem; }
+  .modal p.sub { font-size: 0.8rem; color: var(--muted); margin-bottom: 1.2rem; }
+
+  /* Login */
+  .login-input {
+    width: 100%; padding: 0.75rem 1rem;
+    border: 2px solid #dde3ec; border-radius: 10px;
+    font-family: 'DM Sans', sans-serif; font-size: 0.9rem;
+    margin-bottom: 0.8rem; outline: none;
+    transition: border-color 0.2s;
+  }
+  .login-input:focus { border-color: var(--teal); }
+  .login-btn {
+    width: 100%; padding: 0.75rem;
+    background: var(--navy); color: white;
+    border: none; border-radius: 10px;
+    font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 600;
+    cursor: pointer;
+  }
+  .login-error { color: var(--red); font-size: 0.8rem; margin-top: 0.5rem; display: none; }
+  .modal-close {
+    float: right; background: none; border: none;
+    font-size: 1.3rem; cursor: pointer; color: var(--muted);
+    margin-top: -0.3rem;
+  }
+
+  /* Results */
+  #results-panel { display: none; }
+  .results-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem; }
+  .results-header h3 { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--navy); }
+  .resp-count {
+    background: var(--teal); color: white;
+    font-size: 0.75rem; font-weight: 700;
+    padding: 0.25rem 0.7rem; border-radius: 20px;
+  }
+  .r-section-title {
+    font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--gold);
+    margin: 1.2rem 0 0.6rem;
+  }
+  .r-item { margin-bottom: 1.1rem; }
+  .r-item-label { font-size: 0.78rem; font-weight: 500; color: var(--text); margin-bottom: 0.4rem; line-height: 1.4; }
+  .bar-group { display: flex; flex-direction: column; gap: 0.3rem; }
+  .bar-row { display: flex; align-items: center; gap: 0.5rem; }
+  .bar-tag { font-size: 0.7rem; font-weight: 700; color: var(--muted); width: 26px; text-align: right; flex-shrink: 0; }
+  .bar-track { flex: 1; background: #eef1f5; border-radius: 20px; height: 10px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 20px; transition: width 0.6s ease; background: var(--teal); }
+  .bar-fill.sa { background: #1a7a6e; }
+  .bar-fill.a  { background: #3aafa2; }
+  .bar-fill.d  { background: #e07b39; }
+  .bar-fill.sd { background: #c0392b; }
+  .bar-fill.yes { background: #1a7a6e; }
+  .bar-fill.no  { background: #c0392b; }
+  .bar-num { font-size: 0.68rem; color: var(--muted); width: 28px; flex-shrink: 0; }
+
+  .clear-btn {
+    margin-top: 1.2rem; width: 100%; padding: 0.6rem;
+    background: none; border: 2px solid #dde3ec;
+    border-radius: 10px; color: var(--muted);
+    font-family: 'DM Sans', sans-serif; font-size: 0.8rem;
+    cursor: pointer; transition: border-color 0.2s, color 0.2s;
+  }
+  .clear-btn:hover { border-color: var(--red); color: var(--red); }
+
+  @media(max-width:420px){
+    .opt-btn { font-size: 0.72rem; padding: 0.45rem 0.3rem; }
+    .q-text { font-size: 0.86rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="site-header">
+  <div class="badge">Research Questionnaire</div>
+  <h1>Theory–Practice Gap in<br>Maternal Health Nursing</h1>
+  <p>Department of Nursing Sciences · College of Health Sciences, Okofia Nnewi · Anambra State</p>
+</div>
+
+<!-- PROGRESS -->
+<div class="progress-wrap">
+  <div class="progress-label">
+    <span id="prog-text">0 of 25 answered</span>
+    <span id="prog-pct">0%</span>
+  </div>
+  <div class="progress-bar-bg"><div class="progress-bar-fill" id="prog-bar"></div></div>
+</div>
+
+<!-- SURVEY FORM -->
+<div class="container" id="survey-container">
+
+  <p style="font-size:0.82rem;color:var(--muted);line-height:1.6;margin-bottom:0.5rem;">
+    This questionnaire is for research purposes only. All responses are <strong>anonymous</strong> and will be kept confidential. Thank you for your cooperation.
+  </p>
+
+  <!-- SECTION A -->
+  <div class="section-heading"><div class="dot"></div><h2>Section A — Socio-Demographic Data</h2><div class="line"></div></div>
+
+  <div class="q-card" id="qc-1">
+    <div class="q-label">Q1</div>
+    <div class="q-text">Age</div>
+    <div class="options-row" data-q="1" data-type="single">
+      <button class="opt-btn" data-val="16–20">16–20</button>
+      <button class="opt-btn" data-val="21–25">21–25</button>
+      <button class="opt-btn" data-val="26–30">26–30</button>
+      <button class="opt-btn" data-val="31+">31+</button>
+    </div>
+  </div>
+
+  <div class="q-card" id="qc-2">
+    <div class="q-label">Q2</div>
+    <div class="q-text">Gender</div>
+    <div class="options-row" data-q="2" data-type="single">
+      <button class="opt-btn" data-val="Male">Male</button>
+      <button class="opt-btn" data-val="Female">Female</button>
+    </div>
+  </div>
+
+  <div class="q-card" id="qc-3">
+    <div class="q-label">Q3</div>
+    <div class="q-text">Level of study</div>
+    <div class="options-row" data-q="3" data-type="single">
+      <button class="opt-btn" data-val="Year 1">Year 1</button>
+      <button class="opt-btn" data-val="Year 2">Year 2</button>
+      <button class="opt-btn" data-val="Year 3">Year 3</button>
+      <button class="opt-btn" data-val="Year 4">Year 4</button>
+    </div>
+  </div>
+
+  <div class="q-card" id="qc-4">
+    <div class="q-label">Q4</div>
+    <div class="q-text">Have you started clinical posting?</div>
+    <div class="options-row options-yn" data-q="4" data-type="single">
+      <button class="opt-btn" data-val="Yes">Yes</button>
+      <button class="opt-btn" data-val="No">No</button>
+    </div>
+  </div>
+
+  <div class="q-card" id="qc-5">
+    <div class="q-label">Q5</div>
+    <div class="q-text">Have you had clinical posting in maternal health?</div>
+    <div class="options-row options-yn" data-q="5" data-type="single">
+      <button class="opt-btn" data-val="Yes">Yes</button>
+      <button class="opt-btn" data-val="No">No</button>
+    </div>
+  </div>
+
+  <!-- SECTION B -->
+  <div class="section-heading"><div class="dot"></div><h2>Section B — Perception of Classroom Teaching</h2><div class="line"></div></div>
+  <p style="font-size:0.78rem;color:var(--muted);margin-bottom:1rem;">SA = Strongly Agree &nbsp;·&nbsp; A = Agree &nbsp;·&nbsp; D = Disagree &nbsp;·&nbsp; SD = Strongly Disagree</p>
+
+  <div class="q-card" id="qc-6">
+    <div class="q-label">Q6</div>
+    <div class="q-text">Classroom teaching in maternal health is well organized.</div>
+    <div class="options-row" data-q="6" data-type="likert">
+      <button class="opt-btn" data-val="SA">SA</button>
+      <button class="opt-btn" data-val="A">A</button>
+      <button class="opt-btn" data-val="D">D</button>
+      <button class="opt-btn" data-val="SD">SD</button>
+    </div>
+  </div>
+
+  <div class="q-card" id="qc-7">
+    <div class="q-label">Q7</div>
+    <div class="q-text">Lecturers use effective teaching methods (lecture, demonstration, case study).</div>
+    <div class="options-row" data-q="7" data-type="likert">
+      <button class="opt-btn" data-val="SA">SA</button>
+      <button class="opt-btn" data-val="A">A</button>
+      <button class="opt-btn" data-val="D">D</button>
+      <button class="opt-btn" data-val="SD">SD</button>
+    </div>
+  </div>
+
+  <div class="q-card" id="qc-8">
+    <div class="q-label">Q8</div>
+    <div class="q-text">Classroom teaching adequately prepares me for clinical practice.</div>
+    <div class="options-row" data-q="8" data-type="likert">
+      <button class="opt-btn" data-val="SA">SA</button>
+      <button class="opt-btn" data-val="A">A</button>
+      <button class="opt-btn" data-val="D">D</button>
+      <button class="opt-btn" data-val="SD">SD</button>
+    </div>
+  </div>
+
+  <div class="q-card" id="qc-9">
+    <div class="q-label">Q9</div>
+    <div class="q-text">Practical demonstrations are included during teaching sessions.</div>
+    <div class="options-row" data-q="9" data-type="likert">
+      <button class="opt-btn" data-val="SA">SA</button>
+      <button class="opt-btn" data-val="A">A</button>
+      <button class="opt-btn" data-val="D">D</button>
+      <button class="opt-btn" data-val="SD">SD</button>
+    </div>
+  </div>
+
+  <div class="q-card" id="qc-10">
+    <div class="q-label">Q10</div>
+    <div class="q-text">Teaching materials (videos, mannequins, charts) are available and used.</div>
+    <div class="options-row" data-q="10" data-type="likert">
+      <button class="opt-btn" data-val="SA">SA</button>
+      <button class="opt-btn" data-val="A">A</button>
+      <button class="opt-btn" data-val="D">D</button>
+      <button class="opt-btn" data-val="SD">SD</button>
+    </div>
+  </div>
+
+  <!-- SECTION C -->
+  <div class="section-heading"><div class="dot"></div><h2>Section C — Factors Contributing to the Gap</h2><div class="line"></div></div>
+
+  <div class="q-card" id="qc-11">
+    <div class="q-label">Q11</div>
+    <div class="q-text">There is inadequate supervision during clinical practice.</div>
+    <div class="options-row" data-q="11" data-type="likert">
+      <button class="opt-btn" data-val="SA">SA</button><button class="opt-btn" data-val="A">A</button><button class="opt-btn" data-val="D">D</button><button class="opt-btn" data-val="SD">SD</button>
+    </div>
+  </div>
+
+  <div class="q-card" id="qc-12">
+    <div class="q-label">Q12</div>
+    <div class="q-text">Lack of equipment affects maternal health clinical learning.</div>
+    <div class="options-row" data-q="12" data-type="likert">
+      <button class="opt-btn" data-val="SA">SA</button><button class="opt-btn" data-val="A">A</button><button class="opt-btn" data-val="D">D</button><button class="opt-btn" data-val="SD">SD</button>
+    </div>
+  </div>
+
+  <div class="q-card" id="qc-13">
+    <div class="q-label">Q13</div>
+    <div class="q-text">Large number of students in clinical areas reduces learning opportunities.</div>
+    <div class="options-row" data-q="13" data-type="likert">
+      <button class="opt-btn" data-val="SA">SA</button><button class="opt-btn" data-val="A">A</button><button class="opt-btn" data-val="D">D</button><button class="opt-btn" data-val="SD">SD</button>
+    </div>
+  </div>
+
+  <div class="q-card" id="qc-14">
+    <div class="q-label">Q14</div>
+    <div class="q-text">Differences exist between what is taught in class and what is practiced in hospital.</div>
+    <div class="options-row" data-q="14" data-type="likert">
+      <button class="opt-btn" data-val="SA">SA</button><button class="opt-btn" data-val="A">A</button><button class="opt-btn" data-val="D">D</button><button class="opt-btn" data-val="SD">SD</button>
+    </div>
+  </div>
+
+  <div class="q-card" id="qc-15">
+    <div class="q-label">Q15</div>
+    <div class="q-text">Clinical staff sometimes perform procedures differently from classroom teaching.</div>
+    <div class="options-row" data-q="15" data-type="likert">
+      <button class="opt-btn" data-val="SA">SA</button><button class="opt-btn" data-val="A">A</button><button class="opt-btn" data-val="D">D</button><button class="opt-btn" data-val="SD">SD</button>
+    </div>
+  </div>
+
+  <!-- SECTION D -->
+  <div class="section-heading"><div class="dot"></div><h2>Section D — Effects of the Theory–Practice Gap</h2><div class="line"></div></div>
+
+  <div class="q-card" id="qc-16">
+    <div class="q-label">Q16</div>
+    <div class="q-text">The theory–practice gap reduces my confidence in clinical practice.</div>
+    <div class="options-row" data-q="16" data-type="likert">
+      <button class="opt-btn" data-val="SA">SA</button><button class="opt-btn" data-val="A">A</button><button class="opt-btn" data-val="D">D</button><button class="opt-btn" data-val="SD">SD</button>
+    </div>
+  </div>
+
+  <div class="q-card" id="qc-17">
+    <div class="q-label">Q17</div>
+    <div class="q-text">It makes it difficult for me to perform maternal health procedures.</div>
+    <div class="options-row" data-q="17" data-type="likert">
+      <button class="opt-btn" data-val="SA">SA</button><button class="opt-btn" data-val="A">A</button><button class="opt-btn" data-val="D">D</button><button class="opt-btn" data-val="SD">SD</button>
+    </div>
+  </div>
+
+  <div class="q-card" id="qc-18">
+    <div class="q-label">Q18</div>
+    <div class="q-text">It increases anxiety during clinical posting.</div>
+    <div class="options-row" data-q="18" data-type="likert">
+      <button class="opt-btn" data-val="SA">SA</button><button class="opt-btn" data-val="A">A</button><button class="opt-btn" data-val="D">D</button><button class="opt-btn" data-val="SD">SD</button>
+    </div>
+  </div>
+
+  <div class="q-card" id="qc-19">
+    <div class="q-label">Q19</div>
+    <div class="q-text">It affects my overall clinical performance.</div>
+    <div class="options-row" data-q="19" data-type="likert">
+      <button class="opt-btn" data-val="SA">SA</button><button class="opt-btn" data-val="A">A</button><button class="opt-btn" data-val="D">D</button><button class="opt-btn" data-val="SD">SD</button>
+    </div>
+  </div>
+
+  <div class="q-card" id="qc-20">
+    <div class="q-label">Q20</div>
+    <div class="q-text">It reduces my interest in maternal health nursing.</div>
+    <div class="options-row" data-q="20" data-type="likert">
+      <button class="opt-btn" data-val="SA">SA</button><button class="opt-btn" data-val="A">A</button><button class="opt-btn" data-val="D">D</button><button class="opt-btn" data-val="SD">SD</button>
+    </div>
+  </div>
+
+  <!-- SECTION E -->
+  <div class="section-heading"><div class="dot"></div><h2>Section E — Strategies to Improve Integration</h2><div class="line"></div></div>
+
+  <div class="q-card" id="qc-21">
+    <div class="q-label">Q21</div>
+    <div class="q-text">Simulation-based learning should be introduced or increased.</div>
+    <div class="options-row" data-q="21" data-type="likert">
+      <button class="opt-btn" data-val="SA">SA</button><button class="opt-btn" data-val="A">A</button><button class="opt-btn" data-val="D">D</button><button class="opt-btn" data-val="SD">SD</button>
+    </div>
+  </div>
+
+  <div class="q-card" id="qc-22">
+    <div class="q-label">Q22</div>
+    <div class="q-text">More practical demonstrations should be done in class.</div>
+    <div class="options-row" data-q="22" data-type="likert">
+      <button class="opt-btn" data-val="SA">SA</button><button class="opt-btn" data-val="A">A</button><button class="opt-btn" data-val="D">D</button><button class="opt-btn" data-val="SD">SD</button>
+    </div>
+  </div>
+
+  <div class="q-card" id="qc-23">
+    <div class="q-label">Q23</div>
+    <div class="q-text">Collaboration between lecturers and clinical staff should be improved.</div>
+    <div class="options-row" data-q="23" data-type="likert">
+      <button class="opt-btn" data-val="SA">SA</button><button class="opt-btn" data-val="A">A</button><button class="opt-btn" data-val="D">D</button><button class="opt-btn" data-val="SD">SD</button>
+    </div>
+  </div>
+
+  <div class="q-card" id="qc-24">
+    <div class="q-label">Q24</div>
+    <div class="q-text">Clinical supervision should be strengthened.</div>
+    <div class="options-row" data-q="24" data-type="likert">
+      <button class="opt-btn" data-val="SA">SA</button><button class="opt-btn" data-val="A">A</button><button class="opt-btn" data-val="D">D</button><button class="opt-btn" data-val="SD">SD</button>
+    </div>
+  </div>
+
+  <div class="q-card" id="qc-25">
+    <div class="q-label">Q25</div>
+    <div class="q-text">Teaching should be more practice-oriented.</div>
+    <div class="options-row" data-q="25" data-type="likert">
+      <button class="opt-btn" data-val="SA">SA</button><button class="opt-btn" data-val="A">A</button><button class="opt-btn" data-val="D">D</button><button class="opt-btn" data-val="SD">SD</button>
+    </div>
+  </div>
+
+  <!-- SUBMIT -->
+  <div class="submit-wrap">
+    <button class="submit-btn" id="submit-btn" disabled onclick="submitSurvey()">Submit Responses</button>
+    <p class="submit-note">Please answer all 25 questions before submitting.</p>
+  </div>
+
+  <!-- THANK YOU -->
+  <div id="thankyou">
+    <div class="ty-icon">🎓</div>
+    <h2>Thank you!</h2>
+    <p>Your response has been recorded.<br>It will be kept anonymous and confidential.</p>
+  </div>
+
+</div><!-- /container -->
+
+<!-- ADMIN FAB -->
+<button class="admin-fab" title="View Results" onclick="openAdmin()">📊</button>
+
+<!-- ADMIN MODAL -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal">
+    <button class="modal-close" onclick="closeAdmin()">✕</button>
+
+    <!-- Login Panel -->
+    <div id="login-panel">
+      <h3>Results Dashboard</h3>
+      <p class="sub">Enter the admin password to view all responses.</p>
+      <input class="login-input" type="password" id="pw-input" placeholder="Password" onkeydown="if(event.key==='Enter')checkPw()">
+      <button class="login-btn" onclick="checkPw()">View Results →</button>
+      <p class="login-error" id="login-error">Incorrect password. Try again.</p>
+    </div>
+
+    <!-- Results Panel -->
+    <div id="results-panel">
+      <div class="results-header">
+        <h3>All Responses</h3>
+        <span class="resp-count" id="resp-count">0 responses</span>
+      </div>
+      <div id="results-body"></div>
+      <button class="clear-btn" onclick="clearData()">🗑 Clear all responses</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── CONFIG ──
+const ADMIN_PASSWORD = "nursing2024"; // ← CHANGE THIS TO YOUR OWN PASSWORD
+
+// ── STATE ──
+const answers = {};
+const TOTAL = 25;
+
+// ── STORAGE ──
+const STORAGE_KEY = "nursing_survey_responses_v1";
+
+function loadResponses() {
+  try {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+  } catch(e) { return []; }
+}
+
+function saveResponse(resp) {
+  const all = loadResponses();
+  all.push(resp);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(all));
+}
+
+function clearResponses() {
+  localStorage.removeItem(STORAGE_KEY);
+}
+
+// ── OPTION BUTTONS ──
+document.querySelectorAll('.options-row').forEach(row => {
+  row.querySelectorAll('.opt-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      row.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      const q = row.dataset.q;
+      answers[q] = btn.dataset.val;
+      document.getElementById('qc-' + q).classList.add('answered');
+      updateProgress();
+    });
+  });
+});
+
+function updateProgress() {
+  const n = Object.keys(answers).length;
+  const pct = Math.round((n / TOTAL) * 100);
+  document.getElementById('prog-text').textContent = n + ' of ' + TOTAL + ' answered';
+  document.getElementById('prog-pct').textContent = pct + '%';
+  document.getElementById('prog-bar').style.width = pct + '%';
+  document.getElementById('submit-btn').disabled = n < TOTAL;
+}
+
+// ── SUBMIT ──
+function submitSurvey() {
+  const resp = { ts: new Date().toISOString(), answers: { ...answers } };
+  saveResponse(resp);
+  document.getElementById('survey-container').innerHTML = document.getElementById('thankyou').outerHTML;
+  document.getElementById('thankyou').style.display = 'block';
+}
+
+// ── ADMIN ──
+function openAdmin() {
+  document.getElementById('modal-overlay').classList.add('open');
+  document.getElementById('pw-input').focus();
+}
+function closeAdmin() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.getElementById('login-panel').style.display = 'block';
+  document.getElementById('results-panel').style.display = 'none';
+  document.getElementById('pw-input').value = '';
+  document.getElementById('login-error').style.display = 'none';
+}
+
+function checkPw() {
+  const val = document.getElementById('pw-input').value;
+  if(val === ADMIN_PASSWORD) {
+    document.getElementById('login-panel').style.display = 'none';
+    document.getElementById('results-panel').style.display = 'block';
+    renderResults();
+  } else {
+    document.getElementById('login-error').style.display = 'block';
+  }
+}
+
+function clearData() {
+  if(confirm('Are you sure you want to delete ALL responses? This cannot be undone.')) {
+    clearResponses();
+    renderResults();
+  }
+}
+
+// ── RENDER RESULTS ──
+const QUESTIONS = {
+  1:  {text:"Age", type:"single", opts:["16–20","21–25","26–30","31+"]},
+  2:  {text:"Gender", type:"single", opts:["Male","Female"]},
+  3:  {text:"Level of study", type:"single", opts:["Year 1","Year 2","Year 3","Year 4"]},
+  4:  {text:"Started clinical posting?", type:"yn", opts:["Yes","No"]},
+  5:  {text:"Clinical posting in maternal health?", type:"yn", opts:["Yes","No"]},
+  6:  {text:"Classroom teaching is well organized.", type:"likert"},
+  7:  {text:"Lecturers use effective teaching methods.", type:"likert"},
+  8:  {text:"Classroom teaching prepares me for clinical practice.", type:"likert"},
+  9:  {text:"Practical demonstrations included in teaching.", type:"likert"},
+  10: {text:"Teaching materials are available and used.", type:"likert"},
+  11: {text:"Inadequate supervision during clinical practice.", type:"likert"},
+  12: {text:"Lack of equipment affects clinical learning.", type:"likert"},
+  13: {text:"Large student numbers reduce learning opportunities.", type:"likert"},
+  14: {text:"Differences between class teaching and hospital practice.", type:"likert"},
+  15: {text:"Clinical staff perform procedures differently from class.", type:"likert"},
+  16: {text:"Gap reduces confidence in clinical practice.", type:"likert"},
+  17: {text:"Difficult to perform maternal health procedures.", type:"likert"},
+  18: {text:"Increases anxiety during clinical posting.", type:"likert"},
+  19: {text:"Affects overall clinical performance.", type:"likert"},
+  20: {text:"Reduces interest in maternal health nursing.", type:"likert"},
+  21: {text:"Simulation-based learning should be increased.", type:"likert"},
+  22: {text:"More practical demonstrations in class.", type:"likert"},
+  23: {text:"Collaboration between lecturers and staff improved.", type:"likert"},
+  24: {text:"Clinical supervision should be strengthened.", type:"likert"},
+  25: {text:"Teaching should be more practice-oriented.", type:"likert"},
+};
+
+const SECTIONS = [
+  {title:"Section A — Socio-Demographic", qs:[1,2,3,4,5]},
+  {title:"Section B — Classroom Teaching", qs:[6,7,8,9,10]},
+  {title:"Section C — Contributing Factors", qs:[11,12,13,14,15]},
+  {title:"Section D — Effects of the Gap", qs:[16,17,18,19,20]},
+  {title:"Section E — Strategies", qs:[21,22,23,24,25]},
+];
+
+function countVals(responses, qNum, opts) {
+  const counts = {};
+  opts.forEach(o => counts[o] = 0);
+  responses.forEach(r => {
+    const v = r.answers[String(qNum)];
+    if(v && counts[v] !== undefined) counts[v]++;
+  });
+  return counts;
+}
+
+function renderResults() {
+  const responses = loadResponses();
+  const n = responses.length;
+  document.getElementById('resp-count').textContent = n + (n===1?' response':' responses');
+
+  let html = '';
+  SECTIONS.forEach(sec => {
+    html += `<div class="r-section-title">${sec.title}</div>`;
+    sec.qs.forEach(qNum => {
+      const q = QUESTIONS[qNum];
+      const opts = q.type === 'likert' ? ['SA','A','D','SD'] : q.opts;
+      const counts = countVals(responses, qNum, opts);
+      html += `<div class="r-item">
+        <div class="r-item-label"><strong>Q${qNum}.</strong> ${q.text}</div>
+        <div class="bar-group">`;
+      opts.forEach(opt => {
+        const c = counts[opt] || 0;
+        const pct = n > 0 ? Math.round((c/n)*100) : 0;
+        const cls = opt.toLowerCase().replace('+','');
+        html += `<div class="bar-row">
+          <span class="bar-tag">${opt}</span>
+          <div class="bar-track"><div class="bar-fill ${cls}" style="width:${pct}%"></div></div>
+          <span class="bar-num">${c} (${pct}%)</span>
+        </div>`;
+      });
+      html += `</div></div>`;
+    });
+  });
+
+  document.getElementById('results-body').innerHTML = html || '<p style="color:var(--muted);font-size:0.85rem;">No responses yet.</p>';
+}
+
+// Close modal on overlay click
+document.getElementById('modal-overlay').addEventListener('click', function(e){
+  if(e.target === this) closeAdmin();
+});
+</script>
+</body>
+</html>
